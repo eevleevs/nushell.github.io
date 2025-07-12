@@ -610,6 +610,25 @@ $env.config = {
 }
 ```
 
+For a background-agnostic theme:
+
+```nu
+use std
+
+$env.config = {
+  # ...
+  color_config: (std config dark-theme | transpose key val | update val {|line|
+      if ($line.val | describe) == string {
+        $line.val | str replace "white" "default"
+      } else {
+        $line.val
+      }
+    } | transpose -rd
+  )
+  # ...
+}
+```
+
 ## Accessibility
 
 It's often desired to have the minimum amount of decorations when using a screen reader. In those cases, it's possible to disable borders and other decorations for both table and errors with the following options:
